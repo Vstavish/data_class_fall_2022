@@ -109,6 +109,14 @@ Copy these commands one a a time, and paste them into the Console, then hit Retu
        install.packages("swirl")
 :::
 
+```{r}
+   install.packages("janitor")
+   install.packages("rmarkdown")
+   install.packages("skimr")
+   install.packages("swirl")
+
+```
+
 These package names should all be in quotes. We'll be installing other packages later in this guide, but for now that is everything you need.
 
 ### Files tab {.unnumbered}
