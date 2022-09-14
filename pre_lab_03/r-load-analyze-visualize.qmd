@@ -351,12 +351,26 @@ This is a basic chart using ggplot. To break down the code:
     1: Build a table for NewYorkTimes employees, and determine median salary of NewYorkTimes employees   
 ```{r}
 #your answer here
+
+nyt_median <- MediaBucks %>% filter(COMPANY == "NewYorkTimes")
+summary(nyt_median)
+median(nyt_median$Salary)
+
+#median salary is $52,000
 ```
 
 
       2: Identify title, gender and race of the highest paid position at NYT  
 ```{r}
 #your answer here
+
+nyt_top <- MediaBucks %>% 
+  filter(COMPANY == "NewYorkTimes") %>%
+  select(TITLE, COMPANY, Salary, Race, Gender) %>% 
+  slice_max(Salary, n = 1)
+
+#Executive Editor of news at NYT, $350,000, Black, no answer for gender
+
 ```
 
 
@@ -364,6 +378,19 @@ This is a basic chart using ggplot. To break down the code:
 
 ```{r}
 #your answer here
+
+bloom_med <- MediaBucks 
+  bloom_med <- subset(bloom_med, grepl("?Bloomberg", COMPANY))
+  summary(bloom_med)
+  median(bloom_med$Salary)
+  
+  median(nyt_median$Salary) - median(bloom_med$Salary)
+  
+  
+  
+# Median salary is $50,000. That's $2,000 less than the median NYT salary
+  
+
 
 ```
 
