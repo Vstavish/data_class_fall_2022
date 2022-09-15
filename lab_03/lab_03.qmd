@@ -17,6 +17,9 @@ library(tidyverse)
 # Load janitor here
 library(janitor)
 
+install.packages("dplyr")
+library(dplyr)
+
 ```
 
 ### Load data
@@ -54,10 +57,11 @@ A1:
 
 h_pop <- md_data %>%
   select(place, x2020_hispanic) %>%
-  sort(x2020_hispanic, decreasing = TRUE)
+  arrange(desc(x2020_hispanic))
  
 
 # your answer here
+# Baltimore City, Wheaton CDP, Germantown CDP, Silver Spring CDP, Aspen Hill CDP
 
 ```
 
