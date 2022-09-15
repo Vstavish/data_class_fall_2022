@@ -124,7 +124,7 @@ head(MediaBucks)
 Here is a quick way to view the range of your data
 
 ```{r}
-summary(MediaBucks$Salary)
+summary(MediaBucks$TITLE)
 ```
 
 Size and scope
@@ -179,7 +179,7 @@ quantile(MediaBucks$Salary, c(0.25, 0.50, 0.75, 0.9, 0.99), na.rm=TRUE)
 Build a simple summary table by Gender
 
 ```{r}
-MediaBucks %>% 
+MediaBucks %>%
   select(Gender, Salary) %>% 
   group_by(Gender) %>% 
   summarize(Total = sum(Salary, na.rm=TRUE))
@@ -269,10 +269,41 @@ summary(Reporters$Salary)
 
 Questions:
 
-    1: Who is making $230,504 as a reporter???   
+    1: Who is making $230,504 as a reporter???
+```{r}
+
+Reporters %>%
+  select(TITLE, COMPANY, Salary) %>%
+  filter(Salary==230504)
+  
+
+```
     2: Make a table for editors, figure out medians.   
+```{r}
+
+editors <- subset(MediaBucks, grepl("?ditor", TITLE))
+
+
+```
     3: Find highest paid editor. Resent them.   
-    4: Make a table for any position involving data  
+
+```{r}
+
+editors %>%
+  select(TITLE, COMPANY, Salary) %>%
+  filter(Salary==770000)
+  
+  
+  
+
+```
+    4: Make a table for any position involving data 
+    
+```{r}
+
+data <- subset(MediaBucks, grepl("?data", JOB_DUTIES))
+
+```
 
 Table with Black reporters at Wall Street Journal
 
