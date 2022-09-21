@@ -293,6 +293,12 @@ below_median <- baltcity_income %>%
   filter(x2020 < 49875, na.rm=TRUE)
 
 # percent of tracts that are below median income 2020 = 48.5%
+below_median <- baltcity_income %>%
+  filter(x2020 < 49875, na.rm=TRUE) %>%
+  tally() %>%
+  mutate(percent = (n/200)/100)
+
+# percent of tracts that are below median income 2020 = 48.5%
 percent_below <- (97/200)*100
 
 # tweet
