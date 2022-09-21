@@ -68,6 +68,7 @@ If we run `glimpse(baltcity_income)`, it will give us a list of the columns, the
 
 ```{r}
 glimpse(baltcity_income)
+
 ```
 
 If we type `head(baltcity_income)`, it will print out the columns and the first six rows of data. 
@@ -277,9 +278,24 @@ Draft a tweet with your findings.
 
 Answer this question in English: Write in Elms
 
-```
-
 ```{r}
 
+baltcity_income %>%
+  dplyr::select(Neighborhood, x2010, x2016, x2020, Census) %>% 
+    summarise(
+    count_tracts = n(),
+    x2020_median = median(x2020, na.rm=TRUE),
+    x2020_avg = mean(x2020, na.rm=TRUE))
+
+# 49875
+# all census tracts below median income 2020
+below_median <- baltcity_income %>%
+  filter(x2020 < 49875, na.rm=TRUE)
+
+# percent of tracts that are below median income 2020 = 48.5%
+percent_below <- (97/200)*100
+
+# tweet
+# About 49% of neighborhoods in Baltimore cities have a median income less than the Baltimore City median of $49,875, according to Census data.
 
 ```
