@@ -1,0 +1,106 @@
+getwd#Lab_04 {lab_04}
+
+rob wells, 8/14/2021
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load libraries and establish settings
+```{r}
+# Turn off scientific notation
+options(scipen=999)
+
+# Load the tidyverse here
+library(tidyverse)
+
+# Load janitor here
+library(janitor)
+
+
+```
+
+### Load data
+
+In this data set, each row represents a city or town in Maryland with the 2010 and 2020 figures for: 
+
+-  Total population 
+-  White only population
+-  Black or African American only population
+-  Hispanic only population 
+-  Native American only population
+-  Asian only population
+-  Pacific Islander (including native Hawiian) only population
+
+Background on this data from [Social Explorer](https://www.socialexplorer.com/data/ACS2016_5yr/metadata/?ds=ACS16_5yr&table=B02001) 
+```{r}
+# Write code to load the Maryland race by city, place for 2010 - 2020 and call it md_race.
+# The data is called lab_03.csv, and is in the same folder as lab_03.qmd (this data notebook)
+
+md_race <- read_csv("lab_04.csv") %>% 
+  as.data.frame()
+
+```
+
+## Answer questions
+
+Q1: Name the five cities that had the largest Hispanic population as a percentage of the entire population in 2020 and call it top5_hispanic. Produce a top 5 table for each, selecting the place, 2020 Hispanic, 2020 total and your new calculation.
+
+A1:
+```{r}
+
+# Write your code in this codeblock.
+
+top5_hispanic <- md_race %>%
+  select(place, x2020_hispanic, x2020_total) %>%
+  mutate(h_percent_2020 = x2020_hispanic/x2020_total) %>%
+  slice_max(h_percent_2020, n= 5)
+
+# Langely Park CDP, Templeville town, Marydel town, Henderson town, Edmonston town
+
+
+```
+
+Q2: Compare the top 10 cities with the largest Black population as a percentage of the overall population in 2010 and 2020. Filter for places with more than 20,000 population in 2010. Call your results pct_black. Compare results for 2020 vs 2010. What is different? What surprised you? 
+
+A2:
+
+```{r}
+#write your code here
+
+# 2010
+pct_black <- md_race %>%
+  select(place, x2010_total, x2010_black, x2020_total, x2020_black) %>%
+  mutate(b_percent_2010 = x2010_black/x2010_total) %>%
+  mutate(b_percent_2020 = x2020_black/x2020_total) %>%
+  filter(x2010_total > 20000) %>%
+  slice_max(b_percent_2010, n=10)
+  #slice_max(b_percent_2010, n=10)
+
+# comparison
+
+# While the median percentage of Black people in each neighborhood remained relatively consistent between 2010 and 2020, the percentage of the Black population in neighborhoods with the highest percentage of Black population went down. For example, Suiteland CDP, which had the highest percentage of Black population in both 2010 and 2020, saw a decrease from 92% Black to 87% Black. Lochearn CDP, which had the second highest percentage of Black population, saw a decrease from 93% Black to 80% Black in that same timeframe. The neighborhood with the third highest percentage of Black population decreased it's Black population from 83% to 74%. 
+
+```
+
+Q3: Find the 15 communities that had the great gains in Hispanic population from 2010 to 2020 as measured by percentage change. Also calculate percentage change for the community's overall growth during the same period. Filter your results for communities with more than 10,000 people as of 2020. Your results will be hisp_growth. Look at your results, craft a one-paragraph story pitch for your editor. 
+
+A3:
+
+```{r}
+# Hispanic pct change top 15 and overall pct change for places over 10,000 pop
+hisp_growth <- md_race %>%
+  select(place, x2010_total, x2010_hispanic, x2020_total, x2020_hispanic) %>%
+  mutate(h_pctchange = (x2020_hispanic-x2010_hispanic)/x2010_hispanic) %>%
+  filter(x2010_hispanic > 0) %>%
+  mutate(total_pctchange = (x2020_total-x2010_total)/x2010_total) %>%
+  filter( x2020_total > 10000) %>%
+  slice_max(h_pctchange, n=15)
+
+# pitch
+
+# North Laurel CDP saw a huge rise in both total and Hispanic population between 2010 and 2020. The Hispanic population went up 11% and the total population went up 5%. The neighborhood with the next highest gains was Lake Arbor CDP and only saw a 6% increase in Hispanic population and less than 1% increase in total population. Why is North Laurel growing so quickly? Why is it so desirable for both the general population and Hispanic people?
+
+
+
+```
