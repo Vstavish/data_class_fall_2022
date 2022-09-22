@@ -101,6 +101,4 @@ hisp_growth <- md_race %>%
 
 # North Laurel CDP saw a huge rise in both total and Hispanic population between 2010 and 2020. The Hispanic population went up 11% and the total population went up 5%. The neighborhood with the next highest gains was Lake Arbor CDP and only saw a 6% increase in Hispanic population and less than 1% increase in total population. Why is North Laurel growing so quickly? Why is it so desirable for both the general population and Hispanic people?
 
-
-
 ```
