@@ -79,7 +79,7 @@ pct_black <- md_race %>%
 
 # comparison
 
-# While the median percentage of Black people in each neighborhood remained relatively consistent between 2010 and 2020, the percentage of the Black population in neighborhoods with the highest percentage of Black population went down. For example, Suiteland CDP, which had the highest percentage of Black population in both 2010 and 2020, saw a decrease from 92% Black to 87% Black. Lochearn CDP, which had the second highest percentage of Black population, saw a decrease from 93% Black to 80% Black in that same timeframe. The neighborhood with the third highest percentage of Black population decreased it's Black population from 83% to 74%. 
+# While the median percentage of Black people in each neighborhood remained relatively consistent between 2010 and 2020, the percentage of the Black population in neighborhoods with the highest percentage of Black population went down. For example, Suiteland CDP, which had the highest percentage of Black population in both 2010 and 2020, saw a decrease from 92% Black to 87% Black. Lochearn CDP, which had the second highest percentage of Black population, saw a decrease from 93% Black to 80% Black in that same time frame. The neighborhood with the third highest percentage of Black population decreased it's Black population from 83% to 74%. 
 
 ```
 
