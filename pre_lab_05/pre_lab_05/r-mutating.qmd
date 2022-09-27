@@ -211,5 +211,5 @@ Answer this question in English: Write in Elms
  
 Look at the summary statistics of the column and then whatever the median is, filter for that number in the percentage change column.
 
-
+to look at a table with top 10 and bottom 10 pct change I would slice max and slice min and then join those two new tables.
  
