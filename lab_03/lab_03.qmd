@@ -91,8 +91,19 @@ A3:
 
 top_hispanic <- md_data %>%
   select(place, x2010_hispanic, x2020_hispanic, x2020_total) %>%
-  arrange(desc(x2020_hispanic)) 
-  head(top_hispanic, 15)
+  arrange(desc(x2020_hispanic))
+  head(top_hispanic, 15) 
+ 
+top_hispanic <- md_data %>%
+  select(place, x2010_hispanic, x2020_hispanic, x2020_total) %>%
+  drop_na(place, x2010_hispanic, x2020_hispanic, x2020_total) %>%
+  arrange(desc(x2020_hispanic))
+  tail(top_hispanic)
+  length(top_hispanic)
+  
+  top_hispanic %>%
+    arrange(top_hispanic, x2020_total, x2020_hispanic, -x2010_hispanic, place)
+
   
   # Pitch:
   # Why did some Maryland cities see so much more growth in the Hispanic population than others between 2010 and 2020? Baltimore city grew by about 10,000, Aspen Hill CDP grew by about 8,000 and Montgomery Village CDP grew by about 5,000 between 2010 and 2020. Most of the other Maryland cities that currently have the highest Hispanic population only saw growth of around 2,000 and 3,000. What is making certain cities more desirable for Hispanic people than others? And on the contrary, what are the Maryland cities that saw the largest decrease in their Hispanic population? What makes those cities so undesirable?
