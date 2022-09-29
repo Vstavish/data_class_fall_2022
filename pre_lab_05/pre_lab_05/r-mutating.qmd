@@ -18,8 +18,8 @@ baltcity_income<- read_csv("baltcity_income_clean.csv") %>%
   as.data.frame()
 
 #working on this with your laptop, uncomment and use this code below
-#baltcity_income<- read_csv("baltcity_income_clean.csv") %>% 
-#  as.data.frame()
+baltcity_income<- read_csv("baltcity_income_clean.csv") %>% 
+  as.data.frame()
 
 ```
 
@@ -165,41 +165,21 @@ And answer the following questions:
 
 1) Calculate the difference in median income from 2010 to 2020 for all places listed. Calculate the percentage change. 
 ```{r}
-city_md_income <- read_csv("city_md_income.csv") %>% 
-  as.data.frame()
-
-pct_change <- city_md_income %>%
-  mutate(pctchange = (median_inc_2020 - median_inc_2010)/(median_inc_2010)*100)
-
-
+ 
 ```
 
 Which city had the highest absolute change? Which had the highest percentage change?
 ```{r}
-# highest pct_change was in Shaft
-
-  pct_change %>%
-    slice_max(pctchange, n = 10)
-
-# absolute change was highest in Beaver Creek
-absolute_change <- city_md_income %>%
-  mutate(abs_change = median_inc_2020 - median_inc_2010) %>%
-  slice_max(abs_change, n=10)
-
+ 
 ```
  
 Produce a table with the top 25 places ranked by the highest percentage change.
 ```{r}
-top_25 <- pct_change %>%
-  slice_max(pctchange, n=25)
-
-
+ 
 ```
 
 Produce a second table with the top 25 places ranked by the lowest or negative percentage change.
 ```{r}
-bottom_25 <- pct_change %>%
-  slice_min(pctchange, n=25)
  
 ```
 
@@ -209,7 +189,5 @@ Answer this question in English: Write in Elms
 
 2) Building on the previous lesson on filtering, describe how you would determine the median value of the percentage change and produce a table with the 10 neighborhoods with the highest change and the 10 with the lowest change.
  
-Look at the summary statistics of the column and then whatever the median is, filter for that number in the percentage change column.
 
-to look at a table with top 10 and bottom 10 pct change I would create two new tables from a slice max and slice min and then join those two new tables.
  
