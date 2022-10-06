@@ -15,6 +15,9 @@ When you are finished, commit changes and push to your personal GitHub repo, the
 options(scipen=999)
 
 # Load the tidyverse,rvest,janitor
+library(janitor)
+library(tidyverse)
+library(rvest)
 
 ```
 
@@ -35,6 +38,23 @@ Write a headline and caption.
 
 #your answer here
 
+ads1 <- read_csv("ncaa_athletic_dirs.csv")
+
+ads1_2021 <- ads1 %>%
+  as.data.frame() %>%
+  clean_names %>%
+  filter(year == "2021") %>%
+  group_by(race_sex)
+  
+ads1_2021 %>%
+  ggplot() +
+  geom_bar(aes(x=race_sex, weight=count)) +
+  labs(
+    title="Race and sex of athletic directors in the NCAA in 2021",
+    x = "Race and gender",
+    y = "count",
+    caption = "source: NCAA - By: Victoria Stavish")
+
  
 
 ```
@@ -47,6 +67,15 @@ Write a headline and caption.
 ```{r}
 #your answer here  
 
+ads1 %>%
+  group_by(year) %>%
+  ggplot() +
+  geom_bar(aes(x=year, weight=count)) +
+  labs(
+    title="number of athletic directors in the NCAA 2012 - 2021",
+    x = "Year",
+    y = "count",
+    caption = "source: NCAA - By: Victoria Stavish")
 
 
 ```
@@ -67,7 +96,29 @@ Designate one line for each and a separate color: ie male_white would be blue, f
 
 ```{r}
 
-#your answer here
+# QUESTION: How do I make a key on ggplot? I feel it usually makes on automatically for these types of graphs?
+
+library(ggplot2)
+
+directors <- read_csv("Sports_Race_ADs.csv", skip = 1) %>%
+  clean_names()
+
+
+  ggplot(directors, aes(x=year)) +
+  geom_line(aes(y=male_white), color = "blue") +
+  geom_line(aes(y=male_black), color = "red") +
+  geom_line(aes(y=female_white), color = "green") +
+  geom_line(aes(y=female_black), color = "purple") +
+  geom_line(aes(y=female_other), color = "orange") +
+  geom_line(aes(y=male_other), color = "pink") +
+  labs(
+    title="Race and gender of NCAA athletic directors over time",
+    x = "Year",
+    y = "count",
+    caption = "source: NCAA - By: Victoria Stavish")
+
+
+
 
 
 ```
