@@ -1,0 +1,94 @@
+---
+title: "notebook_project"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+
+
+
+```{r}
+# load libraries 
+
+library(tidyverse)
+library(janitor)
+library(ggplot2)
+
+```
+
+## Explanation of notebook:
+#  The goal of this notebook is to analyze the correlation between average incomes and internet access in Baltimore City neighborhoods. To do this I am using a dataset that includes the median income in Baltimore City neighborhoods based on 2020 Census data. I am also using an open sourec dataset from the City of Baltimore that details how many homes do not have internet subscriptions in each Baltimore City neighborhood. 
+
+## Questions I am asking the data
+#  Do high income areas have high internet access?
+#  Do low income areas have poor internet access?
+#  Does internet access improve/get worse for places whose median         income increased/decreased 2016-2020?
+
+## Caveats in the data
+#  detailed explanation 
+
+## Author 
+#  Victoria Stavish for Jour472
+```{r}
+# load income data
+
+balt_income <- read_csv("baltcity_income_clean.csv")%>%
+clean_names()
+
+# load internet data
+
+balt_internet <- read_csv("balt_internet.csv") %>%
+  clean_names()
+
+```
+
+```{r}
+# Do high income neighborhoods have high percentage of internet access?
+
+balt_income_small <- balt_income %>%
+  as.data.frame() %>%
+  clean_names() %>%
+  select(neighborhood, x2020) %>%
+  arrange(x2020)
+
+balt_internet_small <- balt_internet %>%
+  as.data.frame() %>%
+  clean_names() %>%
+  select(csa2020, nohhint20) %>%
+  arrange(desc(nohhint20))
+
+
+merging <- merge(balt_income_small, balt_internet_small)
+
+
+```
+
+```{r}
+# internet analysis 
+
+balt_internet %>%
+  as.data.frame() %>%
+  clean_names %>%
+  arrange(desc(nohhint20))
+
+
+```
