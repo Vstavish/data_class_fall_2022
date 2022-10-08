@@ -4,50 +4,40 @@ format: html
 editor: visual
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-
-
-
 ```{r}
 # load libraries 
 
 library(tidyverse)
 library(janitor)
 library(ggplot2)
+library(dplyr)
 
 ```
 
 ## Explanation of notebook:
-#  The goal of this notebook is to analyze the correlation between average incomes and internet access in Baltimore City neighborhoods. To do this I am using a dataset that includes the median income in Baltimore City neighborhoods based on 2020 Census data. I am also using an open sourec dataset from the City of Baltimore that details how many homes do not have internet subscriptions in each Baltimore City neighborhood. 
+
+# The goal of this notebook is to analyze the correlation between average incomes and internet access in Baltimore City neighborhoods. To do this I am using a dataset that includes the median income in Baltimore City neighborhoods based on 2020 Census data. I am also using an open source dataset from the City of Baltimore that details how many homes do not have internet subscriptions in each Baltimore City neighborhood.
 
 ## Questions I am asking the data
-#  Do high income areas have high internet access?
-#  Do low income areas have poor internet access?
-#  Does internet access improve/get worse for places whose median         income increased/decreased 2016-2020?
+
+# Do high income areas have high internet access?
+
+# Do low income areas have poor internet access?
+
+# Does internet access improve/get worse for places whose median income increased/decreased 2016-2020?
+
+## Findings
+
+# While neighborhoods with good internet access usually have higher median incomes and neighborhoods with low median incomes usually have poor internet access, there does not seem to be a significant association between decreasing median incomes and lower internet access overtime. Most neighborhoods increase internet access even when they saw negative percent change in median income. 
 
 ## Caveats in the data
-#  detailed explanation 
 
-## Author 
-#  Victoria Stavish for Jour472
+# in both datasets, some neighborhoods are repeated multiple times with different numbers in the same year, so it is unclear which number is the most accurate representation of the neighborhood.
+
+## Author
+
+# Victoria Stavish for Jour472
+
 ```{r}
 # load income data
 
@@ -61,34 +51,103 @@ balt_internet <- read_csv("balt_internet.csv") %>%
 
 ```
 
+# Do low income neighborhoods have low percentage of internet access?
+
+# The ten neighborhoods with highest percentage of homes with no internet access, what is the median income?
+
 ```{r}
+
+# 10 neighborhoods with lowest internet access
+
+balt_internet_b10 <- balt_internet %>%
+  as.data.frame() %>%
+  clean_names() %>%
+ dplyr::: select(csa2020, nohhint20) %>%
+  arrange(desc(nohhint20)) %>%
+  slice_max(nohhint20, n=10)
+
+# median percentage of homes without internet access among the 10 neighborhoods with the lowest internet access = 31.66%
+summary(balt_internet_b10)
+
+# in neighborhoods with lowest percentage of internet access, what is the median salary?
+
+b10_internet_income <- filter(balt_income, neighborhood %in% c("Sandtown-Winchester/Harlem Park", "Greater Rosemont", "Forest Park/Walbrook", "Greater Mondawmin", "Pimlico/Arlington/Hilltop", "Cherry Hill", "Brooklyn/Curtis Bay/Hawkins Pointl", "Oliver/Johnson Square", "Southwest Baltimore", "Southern Park Heights")) %>%
+  dplyr:::select(neighborhood, x2020)
+
+# median income in neighborhoods with lowest percentage of internet access = 33,967
+summary(b10_internet_income)
+  
+```
 # Do high income neighborhoods have high percentage of internet access?
 
-balt_income_small <- balt_income %>%
+# The ten neighborhoods with highest percentage of homes with internet access, what is the median income?
+```{r}
+
+# 10 neighborhoods with high internet access
+
+t10_balt_internet <- balt_internet %>%
   as.data.frame() %>%
   clean_names() %>%
-  select(neighborhood, x2020) %>%
-  arrange(x2020)
+ dplyr::: select(csa2020, nohhint20) %>%
+  arrange(desc(nohhint20)) %>%
+  slice_min(nohhint20, n=10)
 
-balt_internet_small <- balt_internet %>%
-  as.data.frame() %>%
+# median percentage of homes without internet access among the 10 neighborhoods with high internet access = 5.668% 
+summary(t10_balt_internet)
+
+# in neighborhoods with highest internet access, what is the median income?
+
+t10_internet_income <- filter(balt_income, neighborhood %in% c("Greater Roland Park/Poplar Hill", "South Baltimore", "Canton", "	
+Downtown/Seton Hill", "Fells Point", "Greater Lauraville", "North Baltimore/Guilford/Homeland", "	
+Chinquapin Park/Belvedere", "	
+Inner Harbor/Federal Hill", "Hamilton")) %>%
+  dplyr:::select(neighborhood, x2020)
+
+# median income in neighborhoods with highest percentage of internet access = 100,005
+summary(t10_internet_income)
+
+```
+# Does internet access improve/get worse for places whose median income increased/decreased 2016-2020?
+
+```{r}
+# top 10 neighborhoods with greatest growth in median income 2016-2020
+
+poschange_income <- balt_income %>%
   clean_names() %>%
-  select(csa2020, nohhint20) %>%
-  arrange(desc(nohhint20))
+  dplyr:::select(neighborhood, x2016, x2020) %>%
+  mutate(pct_change = ((x2020 - x2016)/x2016*100)) %>%
+  arrange(desc(pct_change)) %>%
+  slice_max(pct_change, n=10)
 
+# Those 10 neighborhoods, how did their internet access change between 2017-2020
 
-merging <- merge(balt_income_small, balt_internet_small)
-
+poschange_internet <- filter(balt_internet, csa2020 %in% c("Greater Charles Village/Barclay", "Clifton-Berea", "Allendale/Irvington/S. Hilton", "Poppleton/The Terraces/Hollins Market", "Orangeville/East Highlandtown", "The Waverlies", "	
+Morrell Park/Violetville", "Upton/Druid Heights", "	
+Southwest Baltimore", "Greenmount East")) %>%
+  dplyr:::select(csa2020, nohhint17, nohhint20) %>%
+  mutate(change = (nohhint20 - nohhint17))
 
 ```
 
-```{r}
-# internet analysis 
+# Does internet access improve/get worse for places whose median income increased/decreased 2016-2020?
 
-balt_internet %>%
-  as.data.frame() %>%
-  clean_names %>%
-  arrange(desc(nohhint20))
+```{r}
+
+# 10 neighborhoods with greatest decrease in median income 2016-2020
+
+negchange_income <- balt_income %>%
+  clean_names() %>%
+  dplyr:::select(neighborhood, x2016, x2020) %>%
+  mutate(pct_change = ((x2020 - x2016)/x2016*100)) %>%
+  arrange(desc(pct_change)) %>%
+  slice_min(pct_change, n=10)
+
+# Those 10 neighborhoods, how did their internet access change between 2017-2020
+
+negchange_internet <- filter(balt_internet, csa2020 %in% c("Southwest Baltimore", "Harbor East/Little Italy", "Greenmount East", "Brooklyn/Curtis Bay/Hawkins Point", "Sandtown-Winchester/Harlem Park", "	
+Westport/Mount Winans/Lakeland", "Cross-Country/Cheswolde", "Upton/Druid Heights")) %>%
+  dplyr:::select(csa2020, nohhint17, nohhint20) %>%
+  mutate(change = (nohhint20 - nohhint17))
 
 
 ```
