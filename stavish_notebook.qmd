@@ -28,7 +28,7 @@ library(dplyr)
 
 ## Findings
 
-# While neighborhoods with good internet access usually have higher median incomes and neighborhoods with low median incomes usually have poor internet access, there does not seem to be a significant association between decreasing median incomes and lower internet access overtime. Most neighborhoods increase internet access even when they saw negative percent change in median income. 
+# While neighborhoods with good internet access usually have higher median incomes and neighborhoods with low median incomes usually have poor internet access, there does not seem to be a significant association between decreasing median incomes and lower internet access overtime. Most neighborhoods increase internet access even when they saw negative percent change in median income.
 
 ## Caveats in the data
 
@@ -78,9 +78,11 @@ b10_internet_income <- filter(balt_income, neighborhood %in% c("Sandtown-Winches
 summary(b10_internet_income)
   
 ```
+
 # Do high income neighborhoods have high percentage of internet access?
 
 # The ten neighborhoods with highest percentage of homes with internet access, what is the median income?
+
 ```{r}
 
 # 10 neighborhoods with high internet access
@@ -107,6 +109,7 @@ Inner Harbor/Federal Hill", "Hamilton")) %>%
 summary(t10_internet_income)
 
 ```
+
 # Does internet access improve/get worse for places whose median income increased/decreased 2016-2020?
 
 ```{r}
