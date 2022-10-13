@@ -11,6 +11,7 @@ library(tidyverse)
 library(janitor)
 library(ggplot2)
 library(dplyr)
+library(ggthemes)
 
 ```
 
@@ -80,7 +81,7 @@ summary(balt_internet_b10)
 b10_internet_income <- filter(balt_income, neighborhood %in% c("Sandtown-Winchester/Harlem Park", "Greater Rosemont", "Forest Park/Walbrook", "Greater Mondawmin", "Pimlico/Arlington/Hilltop", "Cherry Hill", "Brooklyn/Curtis Bay/Hawkins Pointl", "Oliver/Johnson Square", "Southwest Baltimore", "Southern Park Heights")) %>%
   dplyr:::select(neighborhood, x2020) %>%
   group_by(neighborhood) %>% 
-  summarize(mean(x2020)
+  summarize(mean(x2020))
 
 # median income in neighborhoods with lowest percentage of internet access = $33,967
 summary(b10_internet_income)
@@ -111,7 +112,9 @@ t10_internet_income <- filter(balt_income, neighborhood %in% c("Greater Roland P
 Downtown/Seton Hill", "Fells Point", "Greater Lauraville", "North Baltimore/Guilford/Homeland", "	
 Chinquapin Park/Belvedere", "	
 Inner Harbor/Federal Hill", "Hamilton")) %>%
-  dplyr:::select(neighborhood, x2020)
+  dplyr:::select(neighborhood, x2020) %>%
+  group_by(neighborhood) %>% 
+  summarize(mean(x2020))
 
 # median income in neighborhoods with highest percentage of internet access = 100,005
 summary(t10_internet_income)
@@ -159,6 +162,37 @@ negchange_internet <- filter(balt_internet, csa2020 %in% c("Southwest Baltimore"
 Westport/Mount Winans/Lakeland", "Cross-Country/Cheswolde", "Upton/Druid Heights")) %>%
   dplyr:::select(csa2020, nohhint17, nohhint20) %>%
   mutate(change = (nohhint20 - nohhint17))
+
+```
+
+# Scatterplot of internet access and income in neighborhoods in 2020
+```{r}
+# Join the dataframes for Baltimore City income and Baltimore City internet
+
+income_internet_join <- balt_income %>%
+  clean_names() %>%
+  group_by(neighborhood, x2020) %>%
+  inner_join(balt_internet, c("neighborhood" = "csa2020")) %>%
+  select(neighborhood, x2020, nohhint20)
+
+# Create a scatterplot to show the relationship between income and internet access in Baltimore City neighborhoods
+
+ggplot(income_internet_join, aes(y=nohhint20, x=x2020)) +
+geom_point() +
+theme_excel() +
+  labs(
+    title="Internet access and income in Baltimore City neighborhoods",
+    subtitle = "In 2020 Baltimore City neighborhoods with higher median incomes generally
+had more home with internet subscriptions than neighborhoods with 
+low median incomes. Each point represents a neighborhood in Baltimore City,",
+    x = "Median income",
+    y = "Percent of homes without internet subscriptions",
+    caption = "Source: The U.S. Census Bureau  By: Victoria Stavish")
+
+par(oma=c(0,0,2,0))
+
+
+
 
 
 ```
