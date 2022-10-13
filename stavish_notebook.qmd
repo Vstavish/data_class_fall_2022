@@ -16,7 +16,7 @@ library(dplyr)
 
 ## Explanation of notebook:
 
-# The goal of this notebook is to analyze the correlation between average incomes and internet access in Baltimore City neighborhoods. To do this I am using a dataset that includes the median income in Baltimore City neighborhoods based on 2020 Census data. I am also using an open source dataset from the City of Baltimore that details how many homes do not have internet subscriptions in each Baltimore City neighborhood.
+# The goal of this notebook is to analyze the correlation between average incomes and internet access in Baltimore City neighborhoods. To do this I am using a dataset that includes the median income in Baltimore City neighborhoods based on 2020 Census data. I am also using an open source dataset from the City of Baltimore that details how many homes do not have internet subscriptions in each Baltimore City neighborhood. 
 
 ## Questions I am asking the data
 
@@ -32,7 +32,7 @@ library(dplyr)
 
 ## Caveats in the data
 
-# in both datasets, some neighborhoods are repeated multiple times with different numbers in the same year, so it is unclear which number is the most accurate representation of the neighborhood.
+# in both datasets, some neighborhoods are repeated multiple times with different numbers in the same year, so it is unclear which number is the most accurate representation of the neighborhood. The internet subscription dataset also does not detail how they define an internet subscription(ie. broadband or wireless).
 
 ## Author
 
@@ -44,10 +44,16 @@ library(dplyr)
 balt_income <- read_csv("baltcity_income_clean.csv")%>%
 clean_names()
 
+## Data dictionary
+# This dataset has 6 columns. The first column is the names of Baltimore City neighborhoods (chr), the following three columns show the median income in each neighborhood in 2010 (dbl), 2016 (dbl) and 2020 (dbl). The fourth column shows the census id for each neighborhood (dbl) and the fifth column shows the geography id of each neighborhood (dbl). 
+
 # load internet data
 
 balt_internet <- read_csv("balt_internet.csv") %>%
   clean_names()
+
+## Data dictionary
+# This dataset has 9 columns. The first column gives an object id (dbl) to each row. The second column gives the Baltimore City neighborhood name as of the 2010 census data (chr). The following three columns give the percentage of households in each neighborhood that do not have an internet subscription for the years 2017 (dbl), 2018 (dbl) and 2019 (dbl). The sixth column gives the Baltimore City neighborhood name as of the 2020 census data (chr). The seventh column gives the percentage of households in each neighborhood that do not have an internet subscription for the year 2020 (dbl). The eighth and ninth columns give the neighborhood shape (dbl) and length (dbl), neither of which are relevant for our analyses. 
 
 ```
 
@@ -72,9 +78,11 @@ summary(balt_internet_b10)
 # in neighborhoods with lowest percentage of internet access, what is the median salary?
 
 b10_internet_income <- filter(balt_income, neighborhood %in% c("Sandtown-Winchester/Harlem Park", "Greater Rosemont", "Forest Park/Walbrook", "Greater Mondawmin", "Pimlico/Arlington/Hilltop", "Cherry Hill", "Brooklyn/Curtis Bay/Hawkins Pointl", "Oliver/Johnson Square", "Southwest Baltimore", "Southern Park Heights")) %>%
-  dplyr:::select(neighborhood, x2020)
+  dplyr:::select(neighborhood, x2020) %>%
+  group_by(neighborhood) %>% 
+  summarize(mean(x2020)
 
-# median income in neighborhoods with lowest percentage of internet access = 33,967
+# median income in neighborhoods with lowest percentage of internet access = $33,967
 summary(b10_internet_income)
   
 ```
