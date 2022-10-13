@@ -12,6 +12,15 @@ When you are finished, commit changes and push to your personal GitHub repo, the
 ## Load libraries and establish settings
 **Task**: Make a code block and load janitor and the tidyverse
 
+```{r}
+#load libraries
+
+library(tidyverse)
+library(janitor)
+library(stringr)
+```
+
+
 ## Load data
 
 For today's lab, we are using the DEA's ARCOS database, which tracks shipments of opioids and other controlled substances from manufacturers to pharmacies.  As we will read this week, the Washington Post used this data to show which communities were flooded by opioids during the death and overdose crisis of the last two decades. 
@@ -25,11 +34,80 @@ There are four tables in the data folder.
 
 **Task**: Create a codeblock and load the four dataframes using appropriate names below.
 
+```{r}
+#load dataframes
+
+shipments <- read_csv("data/arcos.csv")
+
+state_abbr <- read_csv("data/state_crosswalk.csv")
+
+state_pop <- read_csv("data/state_population_2014.csv")
+
+county_pop <- read_csv("data/county_population_2014.csv")
+
+```
+
+
 ## Questions
 **Task** Create codeblocks in the space below and answer the questions. 
-
 **Q1** Which county or city received the most total opioid pills per person? Add up all the pills between 2006 and 2014 when doing this calculation. How many total pills, and what was the per person rate?
+
+```{r}
+# Q1: Which county or city received the most total opioid pills per person? Add up all the pills between 2006 and 2014 when doing this calculation. How many total pills, and what was the per person rate?
+
+# Group and summarise to find total pill shipments per county. Join shipments and county population dataframes on geoid/countyfips and the  divide total pills by the county population. 
+
+newcountytable <- shipments %>%
+  group_by(countyfips, buyer_county, buyer_state) %>%
+  summarise(total_pills = sum(total_pills)) %>%
+  inner_join(county_pop, c("countyfips" = "geoid")) %>%
+  mutate(pills_per_person = (total_pills / total_population_2014)*100) %>%
+  arrange(desc(pills_per_person))
+
+# Norton City in Virginia had 262,893.40 pills per person between 2006-2014 and the county had a total shipment number of 10,555,170 between 2006-2014
+
+```
+
 
 **Q2** Which U.S. state had the highest number of opioid pills per person for pills shipped in 2014? How many total pills, and what was the per person rate? How did that compare to Washington, D.C.?
 
+```{r}
+# Q2: Which U.S. state had the highest number of opioid pills per person for pills shipped in 2014? How many total pills, and what was the per person rate? How did that compare to Washington, D.C.?
+
+# make sure the strings representing DC are consistent throughout dataframes
+
+state_pop$state <- str_replace(state_pop$state, "District of Columbia", "Washington, DC")
+
+# create a new dataframe by inner joining state population with state abbreviations so that we can later join and group on state abbreviations
+
+newstate_pop <- state_pop %>%
+inner_join(state_abbr, c("state" = "state_name"))
+
+# join newstate_pop with shipments, filter for the year 2014, then group and summarise to get total pills for state and then mutate a column to show pills per person
+
+pills_2014 <- shipments %>%
+  select(buyer_county:total_pills) %>%
+  inner_join(newstate_pop, c("buyer_state" = "state_abb")) %>%
+  filter(year == "2014") %>%
+  group_by(buyer_state, total_population_2014) %>%
+  summarise(total_pills = sum(total_pills)) %>%
+  mutate(pills_per_person = (total_pills / total_population_2014)*100) %>%
+  arrange(desc(pills_per_person))
+  
+# West Virginia had the highest number of opioid pills per person for pills shipped in 2014 at 6,513.188. The total number of pills shipped to West Virginia in 2014 was 120,746,760. In comparison, DC only had 1,356.939 pills per person and 8,599,410 pills total. West Virginia had over four times the amount of pills as DC. 
+
+```
+
+
 **Q3** Write a sentence that could be dropped in as the lede of a news story from the finding in question two. 
+
+```{r}
+# Q3: Write a sentence that could be dropped in as the lede of a news story from the finding in question two. 
+
+# West Virginia was had six thousand opiods delivered to the state per person in 2014, the highest rate by over 200 that year. 
+
+6513.188 - 6252.980
+
+
+```
+
