@@ -16,7 +16,7 @@ library(dplyr)
 
 ## Explanation of notebook:
 
-# The goal of this notebook is to analyze the correlation between average incomes and internet access in Baltimore City neighborhoods. To do this I am using a dataset that includes the median income in Baltimore City neighborhoods based on 2020 Census data. I am also using an open source dataset from the City of Baltimore that details how many homes do not have internet subscriptions in each Baltimore City neighborhood. 
+# The goal of this notebook is to analyze the correlation between average incomes and internet access in Baltimore City neighborhoods. To do this I am using a dataset that includes the median income in Baltimore City neighborhoods based on 2020 Census data. I am also using an open source dataset from the City of Baltimore that details how many homes do not have internet subscriptions in each Baltimore City neighborhood.
 
 ## Questions I am asking the data
 
