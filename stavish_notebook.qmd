@@ -223,6 +223,8 @@ low median incomes. Each point represents a neighborhood in Baltimore City,",
 
 # It is notable that there are some places where both median income increased and the number of households that do not have internet access increased, however, the changes in those numbers are not as drastic and there are not many examples of that, making it less noteworthy than neighborhoods in which internet access increased while median income decreased. 
 
+# However, the general theme of internet access and income having a strong correlation is still true. In 2020, of the 10 neighborhoods in Baltimore City with the best internet access, the median income was about $100,000, while in the neighborhoods in Baltimore City with the worst internet access, the median income was about $34,000. 
+
 
 
 ## Draft two Tweets and include images (R graphics) to accompany the story.
