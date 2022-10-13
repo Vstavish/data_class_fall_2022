@@ -142,6 +142,29 @@ Southwest Baltimore", "Greenmount East")) %>%
   mutate(change = (nohhint20 - nohhint17))
 
 ```
+ 
+# A general look at changes in internet access compared to changes in median income in Baltimore City neighborhoods 2016-2020.
+ 
+```{r}
+income_change <- balt_income %>%
+  dplyr:::select(neighborhood, x2016, x2020) %>%
+  mutate(income_pct_change = ((x2020 - x2016)/x2016*100)) 
+
+
+# mutate the internet data to see percent change over time
+
+internet_change <- balt_internet %>%
+  clean_names() %>%
+  dplyr:::select(csa2020, nohhint17, nohhint20) %>%
+  mutate(internet_pct_change = ((nohhint20 - nohhint17)/nohhint17*100)) 
+  
+# join the change in internet dataframe with the change in income dataframe
+  
+change_join <- internet_change %>%
+  inner_join(income_change, c("csa2020" = "neighborhood"))
+
+
+```
 
 # Does internet access improve/get worse for places whose median income increased/decreased 2016-2020?
 
@@ -164,6 +187,7 @@ Westport/Mount Winans/Lakeland", "Cross-Country/Cheswolde", "Upton/Druid Heights
   mutate(change = (nohhint20 - nohhint17))
 
 ```
+
 
 # Scatterplot of internet access and income in neighborhoods in 2020
 ```{r}
@@ -189,10 +213,25 @@ low median incomes. Each point represents a neighborhood in Baltimore City,",
     y = "Percent of homes without internet subscriptions",
     caption = "Source: The U.S. Census Bureau  By: Victoria Stavish")
 
-par(oma=c(0,0,2,0))
+```
+# story memo
+
+```{r}
+## Armed with your data analysis, write a 300 word reporting memo and story pitch citing your data findings and any relevant background research to provide context. Interviews are not necessary for this assignment but you're welcome to conduct them.
+
+# I am pitching a story on how even though some Baltimore City neighborhood's median income are decreasing, internet access continues to improve among all Baltimore City neighborhoods. For example, the ten Baltimore neighborhoods with the no gains or the smallest gains in median income between 2016 and 2020, all but one saw significant decreases in the percentage of homes without internet access. For example, even though Southwest Baltimore saw a 38% decrease in median income, their percent of households without internet subscriptions decreased by 9% between 2017 and 2020. Upton/Druid Heights also saw their median income decrease by 17% between 2016 and 2020, but their percent of homes without internet also decreased by nearly 17% between 2017 and 2020. While income clearly has an affect, given the scatterplot in this notebook, why does a decrease in median income not necessarily mean a decrease in internet access? Are we seeing a shift towards low income correlating less and less with internet access?
+
+# It is notable that there are some places where both median income increased and the number of households that do not have internet access increased, however, the changes in those numbers are not as drastic and there are not many examples of that, making it less noteworthy than neighborhoods in which internet access increased while median income decreased. 
 
 
+
+## Draft two Tweets and include images (R graphics) to accompany the story.
+
+# tweet 1: While there is a high correlation between internet access and income (as seen in the chart below) we found that some neighborhoods in Baltimore City are seeing gains in internet access even as median income decreases. Read more here: *story link*
+
+# tweet 2: Internet access is improving in some Baltimore City neighborhoods, despite a decreasing median income. We looked at why this is and what it means for the future of internet access in Baltimore. *story link*
 
 
 
 ```
+
