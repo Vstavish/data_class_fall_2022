@@ -228,7 +228,7 @@ Answer this question in English: Write in Elms
 
 Develop two questions that you could answer with a spatial join as described in this chapter, outside of the domain of education.  Briefly describe the two geographic dataframes you would need to answer each question. 
 
-##  
+##  Do health and medical centers in neighborhoods with higher median income see more or less calls/appointments than health/medical centers in neighborhoods with lower median income? To answer this question, I would need a geographical dataframe of counties and their median incomes and then another geographical dataframe of health/medical centers in the area.
 
 ## Do more expensive apartments have better access to greenspace than less expensive apartments? I want to see where you can apartment rent prices are below the average rental price in DC and how much green space exists in those areas compared to areas where the rental prices are above the average in DC. I would need a geographical dataframe of apartments and their rental prices and a geograhical dataframe of green space in DC.
 
