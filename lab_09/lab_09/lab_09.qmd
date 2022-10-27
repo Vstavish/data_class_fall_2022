@@ -12,6 +12,15 @@ When you are finished, commit changes and push to your personal GitHub repo, the
 ## Load libraries and establish settings
 **Task**: Load janitor and the tidyverse and sf
 
+```{r}
+
+library(janitor)
+library(sf)
+library(tidyverse)
+
+```
+
+
 ## Load data
 
 You have been given two spatial dataframes and one regular dataframe to load.  The dataframes are:
@@ -22,6 +31,15 @@ You have been given two spatial dataframes and one regular dataframe to load.  T
 
 **Task** Load the data
 
+```{r}
+
+bmore_homicides <- read_rds("data/baltimore_homicides.rds")
+bmore_demographics <- read_rds("data/baltimore_tract_demographics.rds")
+bmore_shape <- read_rds("data/baltimore_tract_shapefiles.rds")
+
+```
+
+
 ## Questions
 
 **Q1** Are homicides that occur in majority white Census tracts in Baltimore solved at a higher rate than homicides in non-majority white Baltimore census tracts?
@@ -31,5 +49,43 @@ You have been given two spatial dataframes and one regular dataframe to load.  T
 * Output at least one map visualization pertinent to your finding. 
 
 **A1** 
+
+```{r}
+majority_w <- bmore_demographics %>%
+  clean_names() %>%
+  mutate(pct_w = white_pop/total_pop) %>%
+  select(geoid,name,pct_w) %>%
+  mutate(neighborhood_type = case_when(
+    pct_w > .50 ~ "white_majority",
+    TRUE ~ "not_white_majority"
+  ))
+  
+majority_w <- majority_w %>%
+  as.data.frame() %>%
+  inner_join(bmore_shape) %>%
+  st_as_sf()
+
+shootings_by_neighborhood <- bmore_homicides %>%
+  st_join(majority_w) %>%
+  as_tibble()
+
+case_by_neighborhood <- shootings_by_neighborhood %>%
+  group_by(neighborhood_type,disposition) %>%
+  count() %>%
+  pivot_wider(names_from=disposition, values_from=n) %>%
+  clean_names() %>%
+  mutate(total_shootings = closed_by_arrest + closed_without_arrest + open_no_arrest) %>%
+  mutate(unsolved = open_no_arrest + closed_without_arrest) %>%
+  mutate(pct_unsolved = unsolved/total_shootings*100)
+
+ggplot() +
+  geom_sf(data=bmore_shape) +
+  geom_sf(data=bmore_homicides)
+```
+# Majority White neighborhoods in baltimore have a higher rate of solved homicide cases than majority non-white neighborhoods, according to Census data. 
+
+# Majority white neighborhoods in Baltimore had 46% of their homicides unsolved while majority non-white neighborhoods had about 66% of their homicides unsolved. While non-white majority neighborhoods also had more homicides than majority white neighborhoods in general - non-white majority neighborhoods had 2,588 total shootings while majority white neighborhoods had 239 - majority white neighborhoods still have better crime response overall. 
+
+# Majority white neighborhoods only had 15 homicide closed without arrest while majority non-white neighborhoods had 137 homicide cases closed without arrest. Majority white neighborhoods only had 97 homicide cases open without arrest while majority non-white neighborhoods had 1,577 homicide cases open without arrest. Overall, majority white neighborhoods only have 111 unsolved homicide cases and majority non-whote neighborhoods have 1,714. 
 
 
