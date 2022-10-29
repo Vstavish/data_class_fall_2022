@@ -11,6 +11,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # project overview 
 
+# Turn in, via GitHub, a draft of the data notebook you will produce for this project. You should work on this notebook together, but everyone needs to upload a copy to their own GitHub repo and turn in a link for grading. At a minimum, your data notebook should load the data you'll use with this project and have answered at least one of the findings you are to reproduce. The more you have finished, the more feedback I'll be able to give you before you turn in your final notebook.
+
+
+
 
 
 ```{r}
@@ -31,5 +35,8 @@ library(sf)
 
 ```{r}
 
+homicide_data <- read_csv("https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv")
+
 ```
 
+# 
