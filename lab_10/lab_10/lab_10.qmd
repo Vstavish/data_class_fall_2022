@@ -127,16 +127,65 @@ exposed_schools <- wash_schools_buffered %>%
 
 
 **Q3** How many distinct schools had a shooting event within 200 meters in 2019, during school hours?
-**A3** 
+**A3**  74
 
 ```{r}
 
+school_open <- school_days_2019 %>%
+  clean_names() %>%
+  filter(str_detect("school_open", school_status))
 
+shooting_time <- shot_spotter %>%
+  clean_names() %>%
+  filter(year=="2019", hour>6, hour<16, type!="Gunshot_or_Firecracker")
+
+shootings <- shooting_time %>%
+  clean_names() %>%
+  inner_join(school_open, by="date")
+
+wash_schools_buffered <- wash_schools %>%
+  mutate(geometry = st_buffer(geometry, dist=200))
+
+distinct_schools <- wash_schools_buffered %>%
+  clean_names() %>%
+  st_join(shootings, left="FALSE") %>%
+  distinct(school_name)
 
 ```
 
 
 **Q4** Produce a dataframe with the shootings that occurred near the answer to question 1. Write an anecdotal top of a story centering on shootings near that school in 2019, followed by a few paragraphs of context from the answers to question 2 and 3.  
 **A4**
+
+There were eight shootings within 200 meters of Ketcham Elementary School in Washington D.C.while school was in session in 2019. In six of those eight shootings, there were multiple gun shots reported. 
+
+That same year, 74 schools in Washington D.C. also experienced a shooting within 200 meters of the school while classes were in session. In total, there were 132 shootings near Washington D.C. schools while classes were in session in 2019.
+
+```{r}
+
+school_open <- school_days_2019 %>%
+  clean_names() %>%
+  filter(str_detect("school_open", school_status))
+
+shooting_time <- shot_spotter %>%
+  clean_names() %>%
+  filter(year=="2019", hour>6, hour<16, type!="Gunshot_or_Firecracker")
+
+shootings <- shooting_time %>%
+  clean_names() %>%
+  inner_join(school_open, by="date")
+
+wash_schools_buffered <- wash_schools %>%
+  mutate(geometry = st_buffer(geometry, dist=200))
+
+top_school <- wash_schools_buffered %>%
+  clean_names() %>%
+  st_join(shootings, left="FALSE") %>%
+  filter(grepl("Ketcham ES", school_name))
+
+
+
+```
+
 
 
