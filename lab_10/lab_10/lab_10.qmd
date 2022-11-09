@@ -100,9 +100,27 @@ exposed_schools <- wash_schools_buffered %>%
 
 
 **Q2** How many distinct shooting events were there within 200 meters of any DC school in 2019, during school hours?
-**A2** 132
+**A2** 93
 
 ```{r}
+
+count_distinct_shootings <- exposed_schools %>% 
+  distinct(id) %>% 
+  count()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 school_open <- school_days_2019 %>%
   clean_names() %>%
