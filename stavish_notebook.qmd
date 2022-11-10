@@ -142,9 +142,9 @@ Southwest Baltimore", "Greenmount East")) %>%
   mutate(change = (nohhint20 - nohhint17))
 
 ```
- 
+
 # A general look at changes in internet access compared to changes in median income in Baltimore City neighborhoods 2016-2020.
- 
+
 ```{r}
 income_change <- balt_income %>%
   dplyr:::select(neighborhood, x2016, x2020) %>%
@@ -188,8 +188,8 @@ Westport/Mount Winans/Lakeland", "Cross-Country/Cheswolde", "Upton/Druid Heights
 
 ```
 
-
 # Scatterplot of internet access and income in neighborhoods in 2020
+
 ```{r}
 # Join the dataframes for Baltimore City income and Baltimore City internet
 
@@ -214,6 +214,7 @@ low median incomes. Each point represents a neighborhood in Baltimore City,",
     caption = "Source: The U.S. Census Bureau  By: Victoria Stavish")
 
 ```
+
 # story memo
 
 ```{r}
@@ -236,4 +237,3 @@ low median incomes. Each point represents a neighborhood in Baltimore City,",
 
 
 ```
-
